@@ -108,6 +108,7 @@ class InfoController extends AbstractController
 
         return new JsonResponse([
             'transports' => $this->messageStatsService->getTransportsInfo(),
+            'stats' => $this->messageStatsService->getStats(),
         ]);
     }
 

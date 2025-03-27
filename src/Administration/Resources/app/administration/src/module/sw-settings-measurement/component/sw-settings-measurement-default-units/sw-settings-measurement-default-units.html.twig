@@ -1,0 +1,33 @@
+<mt-card
+    class="sw-settings-measurement-default-units"
+    :title="$t('sw-settings-measurement.defaultUnits.title')"
+    position-identifier="sw-settings-measurement-default-units"
+>
+    <p>{{ $t('sw-settings-measurement.defaultUnits.description') }}</p>
+
+    <br>
+
+    <sw-container
+        columns="1fr 1fr 1fr"
+        gap="0 32px"
+    >
+        <mt-select
+            v-model="systemUnit"
+            hide-clearable-button
+            :label="$t('sw-settings-measurement.defaultUnits.systemUnit')"
+            :options="systemUnitOptions"
+        />
+        <mt-select
+            v-model="dimensionUnit"
+            hide-clearable-button
+            :label="$t('sw-settings-measurement.defaultUnits.dimensionUnit')"
+            :options="dimensionUnitOptions"
+        />
+        <mt-select
+            v-model="weightUnit"
+            hide-clearable-button
+            :label="$t('sw-settings-measurement.defaultUnits.weightUnit')"
+            :options="weightUnitOptions"
+        />
+    </sw-container>
+</mt-card>

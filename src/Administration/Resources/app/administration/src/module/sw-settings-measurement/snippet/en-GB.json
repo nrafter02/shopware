@@ -1,0 +1,35 @@
+{
+    "sw-settings-measurement": {
+        "general": {
+            "mainMenuItemGeneral": "Measurement system",
+            "description": "Change measurement here.",
+            "textHeadline": "Measurement system"
+        },
+        "defaultUnits": {
+            "title": "Default units",
+            "description": "Set the default units for how measurements are displayed in the administration. What customers see is defined by the settings of the Sales Channels.",
+            "systemUnit": "Unit system",
+            "system": {
+                "metric": "Metric System",
+                "imperial": "Imperial System"
+            },
+            "dimensionUnit": "Dimension unit",
+            "dimension": {
+                "meter": "Meter",
+                "centimeter": "Centimeter",
+                "millimeter": "Millimeter",
+                "inch": "Inch",
+                "foot": "Foot",
+                "yard": "Yard"
+            },
+            "weightUnit": "Weight unit",
+            "weight": {
+                "kilogram": "Kilogram",
+                "gram": "Gram",
+                "milligram": "Milligram",
+                "pound": "Pound",
+                "ounce": "Ounce"
+            }
+        }
+    }
+}

@@ -75,6 +75,12 @@ export default {
         fileSizeFilter() {
             return Shopware.Filter.getByName('fileSize');
         },
+
+        extensionSdkButtons() {
+            return Shopware.Store.get('actionButtons').buttons.filter((button) => {
+                    return button.entity === 'media' && button.view === 'item';
+            });
+        },
     },
 
     methods: {
@@ -213,6 +219,14 @@ export default {
             this.$nextTick(() => {
                 this.$emit('media-item-replaced');
             });
+        },
+
+        runAction(action, item) {
+            if (typeof action.callback !== 'function') {
+                return;
+            }
+
+            action.callback({ id: item.id, url: item.url });
         },
     },
 };

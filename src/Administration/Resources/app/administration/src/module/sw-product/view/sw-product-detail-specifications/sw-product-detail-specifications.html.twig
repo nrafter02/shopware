@@ -5,20 +5,22 @@
 </div>
 
 <div v-else>
-    {% block sw_product_detail_specifications_measures_packaging %}
+    {% block sw_product_detail_specifications_selling_packaging %}
     <mt-card
-        v-if="showProductCard('measures_packaging') && !productStates.includes('is-download')"
-        class="sw-product-detail-specification__measures-packaging"
-        position-identifier="sw-product-detail-specifications-measures-packaging"
-        :title="$tc('sw-product.specifications.cardTitleMeasuresPackaging')"
+        v-if="showProductCard('selling_packaging') && !productStates.includes('is-download')"
+        class="sw-product-detail-specification__selling-packaging"
+        position-identifier="sw-product-detail-specifications-selling-packaging"
+        :title="$tc('sw-product.specifications.cardTitleSellingPackaging')"
     >
-        {% block sw_product_detail_specifications_measures_packaging_content %}
         <sw-product-packaging-form
             :show-setting-packaging="showModeSetting"
             :allow-edit="acl.can('product.editor')"
         />
-        {% endblock %}
     </mt-card>
+    {% endblock %}
+
+    <!-- @deprecated tag:v6.8.0 - block will be removed -->
+    {% block sw_product_detail_specifications_measures_packaging %}
     {% endblock %}
 
     {% block sw_product_detail_specifications_property %}

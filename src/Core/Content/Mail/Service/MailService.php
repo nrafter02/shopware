@@ -45,7 +45,6 @@ class MailService extends AbstractMailService
         private readonly AbstractMailFactory $mailFactory,
         private readonly AbstractMailSender $mailSender,
         private readonly EntityRepository $mediaRepository,
-        private readonly SalesChannelDefinition $salesChannelDefinition,
         private readonly EntityRepository $salesChannelRepository,
         private readonly SystemConfigService $systemConfigService,
         private readonly EventDispatcherInterface $eventDispatcher,
@@ -105,7 +104,19 @@ class MailService extends AbstractMailService
             return null;
         }
 
-        $this->mailSender->send($mail);
+        try {
+            $this->mailSender->send($mail);
+        } catch (\Throwable $exception) {
+            $this->mailError(
+                errorMessage: \sprintf('Could not send mail with error message: %s', $exception->getMessage()),
+                context: $context,
+                templateData: $templateData,
+                template: (string) $mail->getHtmlBody(),
+                exception: $exception,
+            );
+
+            return null;
+        }
 
         $this->eventDispatcher->dispatch(new MailSentEvent(
             $data['subject'],
@@ -123,7 +134,7 @@ class MailService extends AbstractMailService
         $definition = new DataValidationDefinition('mail_service.send');
 
         $definition->add('recipients', new NotBlank(), new Type('array'));
-        $definition->add('salesChannelId', new EntityExists(['entity' => $this->salesChannelDefinition->getEntityName(), 'context' => $context]));
+        $definition->add('salesChannelId', new EntityExists(['entity' => SalesChannelDefinition::ENTITY_NAME, 'context' => $context]));
         $definition->add('contentHtml', new NotBlank(), new Type('string'));
         $definition->add('contentPlain', new NotBlank(), new Type('string'));
         $definition->add('subject', new NotBlank(), new Type('string'));
@@ -235,15 +246,21 @@ class MailService extends AbstractMailService
     /**
      * @param array<string, mixed> $templateData
      */
-    private function mailError(string $errorMessage, Context $context, array $templateData, ?string $template = null, ?\Throwable $e = null, Level $level = Level::Error): void
-    {
+    private function mailError(
+        string $errorMessage,
+        Context $context,
+        array $templateData,
+        ?string $template = null,
+        ?\Throwable $exception = null,
+        Level $level = Level::Error
+    ): void {
         $this->eventDispatcher->dispatch(
-            new MailErrorEvent($context, $level, $e, $errorMessage, $template, $templateData)
+            new MailErrorEvent($context, $level, $exception, $errorMessage, $template, $templateData)
         );
 
         $this->logger->log($level, $errorMessage, array_merge([
             'template' => $template,
-            'exception' => (string) $e,
+            'exception' => (string) $exception,
         ], $templateData));
     }
 
